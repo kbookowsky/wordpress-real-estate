@@ -1,0 +1,17 @@
+@import 'base';
+
+.block--banner-simple {
+    color: var(--wp--preset--color--white);
+
+    .banner-simple {
+
+        &__title {
+            margin-bottom: 0;
+        }
+
+        &__subtitle {
+            margin-top: 25px;
+            font-weight: 300;
+        }
+    }
+}

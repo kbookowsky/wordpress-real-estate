@@ -1,0 +1,21 @@
+@import 'base';
+
+.block--text-2-columns {
+
+    .text-2-columns {
+
+        &__content {
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: 50px;
+            row-gap: var(--wp--preset--spacing--40);
+        }
+
+        &__item {
+            flex-basis: 100%;
+            @include mq(min-sm) {
+                flex-basis: calc(50% - 25px);
+            }
+        }
+    }
+}

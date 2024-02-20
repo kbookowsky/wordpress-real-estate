@@ -1,0 +1,118 @@
+@import '../media-queries';
+@import '../helpers';
+
+main.main--archive {
+
+    .archive__heading {
+        margin-bottom: var(--wp--preset--spacing--30);
+    }
+
+    .archive__content {
+        padding-top: var(--wp--preset--spacing--50);
+        padding-bottom: var(--wp--preset--spacing--50);
+    }
+
+    .archive__items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        @include transition-1(opacity);
+
+        &.loading {
+            opacity: .5;
+        }
+    }
+
+    .archive__filters {
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 20px;
+
+        input,
+        select {
+            background-color: var(--wp--preset--color--white) !important;
+            width: 100%;
+        }
+
+        .select2-container .select2-selection--single {
+            background-color: var(--wp--preset--color--white) !important;
+        }
+
+        &__first {
+            margin-bottom: 25px;
+        }
+    }
+
+    .archive__filter {
+        width: 100%;
+        @include mq(min-sm) {
+            width: 200px;
+        }
+    }
+
+    .archive__load-more {
+        flex-basis: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+
+        &.hidden {
+            display: none;
+        }
+
+        button {
+
+            svg.loader {
+                display: none;
+                transform: translate(-50%, -50%);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                fill: currentColor;
+            }
+
+            &.loading {
+
+                span {
+                    opacity: 0;
+                }
+
+                svg.loader {
+                    display: block;
+                    animation: 1s bs-loader-animation infinite linear;
+                }
+            }
+        }
+    }
+
+    .block--cta {
+        padding-top: var(--wp--preset--spacing--50);
+        padding-bottom: var(--wp--preset--spacing--50);
+
+        .cta__heading {
+            position: relative;
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 10px;
+                top: calc(var(--wp--preset--spacing--50) * -1);
+                right: 10px;
+                height: 1px;
+                background-color: var(--wp--preset--color--grey);
+            }
+        }
+    }
+
+    @keyframes bs-loader-animation {
+
+        0% {
+          transform: translate(-50%, -50%) rotate(0);
+        }
+    
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+}

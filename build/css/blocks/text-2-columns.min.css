@@ -1,0 +1,1 @@
+.block--text-2-columns .text-2-columns__content{display:flex;flex-wrap:wrap;column-gap:50px;row-gap:var(--wp--preset--spacing--40)}.block--text-2-columns .text-2-columns__item{flex-basis:100%}@media screen and (min-width: 768px){.block--text-2-columns .text-2-columns__item{flex-basis:calc(50% - 25px)}}

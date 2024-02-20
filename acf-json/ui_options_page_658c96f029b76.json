@@ -1,0 +1,22 @@
+{
+    "key": "ui_options_page_658c96f029b76",
+    "title": "Globalne",
+    "active": true,
+    "menu_order": 0,
+    "page_title": "Globalne",
+    "menu_slug": "globalne",
+    "parent_slug": "none",
+    "advanced_configuration": 1,
+    "icon_url": "",
+    "menu_title": "",
+    "position": "",
+    "redirect": 0,
+    "description": "",
+    "update_button": "Aktualizuj",
+    "updated_message": "Ustawienia zostały zaktualizowane",
+    "capability": "edit_posts",
+    "data_storage": "options",
+    "post_id": "",
+    "autoload": 0,
+    "modified": 1703712507
+}

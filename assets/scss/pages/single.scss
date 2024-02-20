@@ -1,0 +1,32 @@
+@import '../media-queries';
+@import '../helpers';
+
+main.main--post {
+
+    .post__content {
+        padding-top: var(--wp--preset--spacing--50);
+        padding-bottom: var(--wp--preset--spacing--50);
+    }
+
+    .block--banner-small {
+        padding-top: var(--wp--preset--spacing--50);
+        padding-bottom: var(--wp--preset--spacing--50);
+        color: var(--wp--preset--color--white);
+
+        .banner-small {
+
+            &__subheading {
+                margin-bottom: 10px;
+            }
+
+            &__heading {
+                font-size: var(--wp--preset--font-size--h-2);
+            }
+        }
+    }
+
+    .block--cta {
+        padding-top: var(--wp--preset--spacing--50);
+        padding-bottom: var(--wp--preset--spacing--50);
+    }
+}

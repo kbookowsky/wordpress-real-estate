@@ -1,0 +1,42 @@
+.card-post {
+    display: block;
+    border: 1px solid rgba($color: #000000, $alpha: .1);
+    text-decoration: none;
+    transition: transform .5s var(--wp--custom--animation--curve), box-shadow .5s var(--wp--custom--animation--curve), opacity .5s var(--wp--custom--animation--curve) !important;
+	will-change: transform, box-shadow, opacity !important;
+    flex-basis: 100%;
+    @include mq(min-sm) {
+        flex-basis: calc(50% - 10px);
+    }
+    @include mq(min-xmd) {
+        flex-basis: calc(33.33% - 13.33px);
+    }
+
+    &__thumbnail {
+        width: 100%;
+        height: 0;
+        padding-bottom: 57%;
+        position: relative;
+
+        img {
+            @include object-fit-cover;
+        }
+    }
+
+    &__content {
+        padding: 10px 10px 15px;
+    }
+
+    &__time {
+        margin-bottom: 10px;
+    }
+
+    &__title {
+        margin-bottom: 15px;
+    }
+
+    &:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0px 2.5px 10px 0 rgba($color: #000000, $alpha: .1);
+    }
+}

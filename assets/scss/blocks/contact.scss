@@ -1,0 +1,34 @@
+@import 'base';
+
+.block--contact {
+
+    .contact {
+
+        &__title {
+            margin-bottom: 30px;
+        }
+
+        &__address {
+            margin-bottom: 30px;
+        }
+
+        &__buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        &__phone,
+        &__email {
+            display: flex;
+            align-items: center;
+            @include hover-link-hidden;
+            transition: text-underline-offset var(--wp--custom--animation--duration) var(--wp--custom--animation--curve), text-decoration-color var(--wp--custom--animation--duration) var(--wp--custom--animation--curve), opacity .5s var(--wp--custom--animation--curve), transform .5s var(--wp--custom--animation--curve);
+            will-change: text-underline-offset, text-decoration-color, opacity, transform;
+
+            svg {
+                margin-right: 10px;
+            }
+        }
+    }
+}

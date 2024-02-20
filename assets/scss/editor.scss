@@ -1,0 +1,26 @@
+@import 'style';
+
+.wp-block {
+    max-width: 100%;
+}
+
+.is-admin {
+
+    &.block {
+        overflow: hidden;
+    }
+}
+
+.acf-block-preview {
+    position: relative;
+    z-index: 10;
+
+    .wp-element-button, 
+    a {
+        pointer-events: none;
+    }
+
+    .block--custom {
+        position: static !important;
+    }
+}

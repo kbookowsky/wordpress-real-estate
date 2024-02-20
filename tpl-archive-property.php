@@ -1,0 +1,284 @@
+<?php
+/**
+ * The template for displaying properties archive.
+ *
+ * Template Name: Archiwum - Nieruchomości
+ *
+ * @package ZlotyKlucz
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+$archive_title = get_the_title();
+
+$cta_heading   = get_field( 'cta_heading', 'options' );
+$cta_left      = get_field( 'cta_left_side', 'options' );
+$cta_separator = get_field( 'cta_separator', 'options' );
+$cta_right     = get_field( 'cta_right_side', 'options' );
+
+$tax_count = 0;
+
+$transaction_type = isset( $_GET['transaction_type'] ) ? absint( $_GET['transaction_type'] ) : null; // phpcs:ignore
+$property_type    = isset( $_GET['property_type'] ) ? absint( $_GET['property_type'] ) : null; // phpcs:ignore
+$property_city    = isset( $_GET['property_city'] ) ? absint( $_GET['property_city'] ) : null; // phpcs:ignore
+
+$query_args = array(
+	'post_type'      => 'property',
+	'posts_per_page' => get_option( 'posts_per_page' ),
+);
+
+if ( ! empty( $transaction_type ) ) {
+	$query_args['tax_query'] = array( // phpcs:ignore
+		array(
+			'taxonomy' => 'transaction_type',
+			'field'    => 'term_id',
+			'terms'    => $transaction_type,
+		),
+	);
+
+	++$tax_count;
+}
+
+if ( ! empty( $property_type ) ) {
+	if ( 0 < $tax_count ) {
+		$query_args['tax_query']['relation'] = 'AND';
+
+		$query_args['tax_query'][] = array(
+			'taxonomy' => 'property_type',
+			'field'    => 'term_id',
+			'terms'    => $property_type,
+		);
+	} else {
+		$query_args['tax_query'] = array( // phpcs:ignore
+			array(
+				'taxonomy' => 'property_type',
+				'field'    => 'term_id',
+				'terms'    => $property_type,
+			),
+		);
+	}
+
+	++$tax_count;
+}
+
+if ( ! empty( $property_city ) ) {
+	if ( 0 < $tax_count ) {
+		$query_args['tax_query']['relation'] = 'AND';
+
+		$query_args['tax_query'][] = array(
+			'taxonomy' => 'property_city',
+			'field'    => 'term_id',
+			'terms'    => $property_city,
+		);
+	} else {
+		$query_args['tax_query'] = array( // phpcs:ignore
+			array(
+				'taxonomy' => 'property_city',
+				'field'    => 'term_id',
+				'terms'    => $property_city,
+			),
+		);
+	}
+}
+
+$the_query = new WP_Query( $query_args );
+
+get_header();
+?>
+
+<main id="main" class="main main--archive">
+	<section class="archive__content">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 archive__heading">
+					<h1 class="archive__title onscroll">
+						<?php echo esc_html( $archive_title ); ?>
+					</h1>
+					<div class="archive__filters archive__filters__first">
+						<div class="archive__filter onscroll">
+							<label for="transaction_type">
+								<?php esc_html_e( 'Typ transakcji', 'zloty-klucz' ); ?>
+							</label>
+							<?php $terms = get_terms( array( 'taxonomy' => 'transaction_type' ) ); ?>
+							<select name="transaction_type" id="transaction_type">
+								<option value="">
+									Wszystkie
+								</option>
+								<?php if ( ! empty( $terms ) && is_array( $terms ) ) { ?>
+									<?php foreach ( $terms as $item ) { ?>
+										<option value="<?php echo esc_attr( $item->term_id ); ?>"<?php echo ! empty( $transaction_type ) && $item->term_id === $transaction_type ? ' selected' : ''; ?>>
+											<?php echo esc_html( $item->name ); ?>
+										</option>
+									<?php } ?>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="archive__filter onscroll">
+							<label for="property_type">
+								<?php esc_html_e( 'Typ nieruchomości', 'zloty-klucz' ); ?>
+							</label>
+							<?php $terms = get_terms( array( 'taxonomy' => 'property_type' ) ); ?>
+							<select name="property_type" id="property_type">
+								<option value="">
+									Wszystkie
+								</option>
+								<?php if ( ! empty( $terms ) && is_array( $terms ) ) { ?>
+									<?php foreach ( $terms as $item ) { ?>
+										<option value="<?php echo esc_attr( $item->term_id ); ?>"<?php echo ! empty( $property_type ) && $item->term_id === $property_type ? ' selected' : ''; ?>>
+											<?php echo esc_html( $item->name ); ?>
+										</option>
+									<?php } ?>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="archive__filter onscroll">
+							<label for="property_city">
+								<?php esc_html_e( 'Miejscowość', 'zloty-klucz' ); ?>
+							</label>
+							<?php $terms = get_terms( array( 'taxonomy' => 'property_city' ) ); ?>
+							<select name="property_city" id="property_city">
+								<option value="">
+									Wszystkie
+								</option>
+								<?php if ( ! empty( $terms ) && is_array( $terms ) ) { ?>
+									<?php foreach ( $terms as $item ) { ?>
+										<option value="<?php echo esc_attr( $item->term_id ); ?>"<?php echo ! empty( $property_city ) && $item->term_id === $property_city ? ' selected' : ''; ?>>
+											<?php echo esc_html( $item->name ); ?>
+										</option>
+									<?php } ?>
+								<?php } ?>
+							</select>
+						</div>
+					</div>
+					<div class="archive__filters archive__filters__second">
+						<div class="archive__filter onscroll">
+							<label for="property_price_min">
+								<?php esc_html_e( 'Cena od', 'zloty-klucz' ); ?>
+							</label>
+							<input type="number" name="property_price_min" id="property_price_min">
+						</div>
+						<div class="archive__filter onscroll">
+							<label for="property_price_max">
+								<?php esc_html_e( 'Cena do', 'zloty-klucz' ); ?>
+							</label>
+							<input type="number" name="property_price_max" id="property_price_max">
+						</div>
+					</div>
+				</div>
+				<div class="col-12 archive__items" data-page="1">
+					<?php if ( $the_query->have_posts() ) { ?>
+						<?php while ( $the_query->have_posts() ) { ?>
+							<?php $the_query->the_post(); ?>
+							<?php get_template_part( 'partials/card-property' ); ?>
+						<?php } ?>
+						<div class="archive__load-more<?php echo $the_query->max_num_pages > 1 ? '' : ' hidden'; ?>">
+							<div class="wp-block-button is-style-primary header__cta onscroll">
+								<button class="wp-block-button__link wp-element-button">
+									<span>
+										<?php esc_html_e( 'Załaduj więcej', 'zloty-klucz' ); ?>
+									</span>
+									<svg class="loader" width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M10.4413 19.7332C8.26866 19.6098 6.13156 18.7182 4.47187 17.0583C2.92642 15.5126 2.04719 13.5531 1.83415 11.5365L0.829108 11.5365C1.04544 13.8098 2.02397 16.0243 3.76472 17.7653C5.61968 19.6206 8.01244 20.6103 10.4413 20.7346L10.4413 19.7332ZM21.1214 11.2845C21.321 8.44512 20.3356 5.53802 18.165 3.36713C16.1077 1.30954 13.3889 0.316491 10.693 0.388043L10.693 1.38844C13.1328 1.31662 15.5958 2.21189 17.4578 4.07419C19.4332 6.04985 20.3201 8.70167 20.1187 11.2845H21.1214Z"/>
+									</svg>
+								</button>
+							</div>
+						</div>
+					<?php } else { ?>
+						<div class="archive__message onscroll">
+							<p><?php esc_html_e( 'Wygląda na to, że nie ma żadnych postów do wyświetlenia', 'zloty-klucz' ); ?></p>
+						</div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="cta block--custom block--cta border-top">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 cta__heading">
+					<h2 class="cta__title onscroll">
+						<?php echo wp_kses_post( $cta_heading ); ?>
+					</h2>
+				</div>
+				<div class="col-12 cta__content">
+					<div class="cta__left">
+						<h3 class="cta__left__heading has-h-4-font-size onscroll">
+							<?php echo wp_kses_post( $cta_left['heading'] ); ?>
+						</h3>
+						<div class="cta__left__content">
+							<a class="cta__left__phone onscroll" href="tel:<?php echo esc_html( str_replace( array( ' ', '-' ), '', $cta_left['phone_number'] ) ); ?>">
+								<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+									<path d="M19.65 23.6834L14.2 29.1334C13.6 28.6 13.0167 28.05 12.45 27.4834C10.7334 25.75 9.18337 23.9334 7.80004 22.0334C6.43337 20.1334 5.33337 18.2334 4.53337 16.35C3.73337 14.45 3.33337 12.6334 3.33337 10.9C3.33337 9.76671 3.53337 8.68337 3.93337 7.68337C4.33337 6.66671 4.96671 5.73337 5.85004 4.90004C6.91671 3.85004 8.08337 3.33337 9.31671 3.33337C9.78337 3.33337 10.25 3.43337 10.6667 3.63337C11.1 3.83337 11.4834 4.13337 11.7834 4.56671L15.65 10.0167C15.95 10.4334 16.1667 10.8167 16.3167 11.1834C16.4667 11.5334 16.55 11.8834 16.55 12.2C16.55 12.6 16.4334 13 16.2 13.3834C15.9834 13.7667 15.6667 14.1667 15.2667 14.5667L14 15.8834C13.8167 16.0667 13.7334 16.2834 13.7334 16.55C13.7334 16.6834 13.75 16.8 13.7834 16.9334C13.8334 17.0667 13.8834 17.1667 13.9167 17.2667C14.2167 17.8167 14.7334 18.5334 15.4667 19.4C16.2167 20.2667 17.0167 21.15 17.8834 22.0334C18.4834 22.6167 19.0667 23.1834 19.65 23.6834Z" fill="#EDC74C"/>
+									<path d="M36.616 30.55C36.616 31.0167 36.5327 31.5 36.366 31.9667C36.316 32.1 36.266 32.2334 36.1994 32.3667C35.916 32.9667 35.5494 33.5334 35.066 34.0667C34.2494 34.9667 33.3494 35.6167 32.3327 36.0334C32.316 36.0334 32.2994 36.05 32.2827 36.05C31.2994 36.45 30.2327 36.6667 29.0827 36.6667C27.3827 36.6667 25.566 36.2667 23.6494 35.45C21.7327 34.6334 19.816 33.5334 17.916 32.15C17.266 31.6667 16.6161 31.1834 15.9994 30.6667L21.4494 25.2167C21.916 25.5667 22.3327 25.8334 22.6827 26.0167C22.766 26.05 22.866 26.1 22.9827 26.15C23.116 26.2 23.2494 26.2167 23.3994 26.2167C23.6827 26.2167 23.8994 26.1167 24.0827 25.9334L25.3494 24.6834C25.766 24.2667 26.166 23.95 26.5494 23.75C26.9327 23.5167 27.316 23.4 27.7327 23.4C28.0494 23.4 28.3827 23.4667 28.7494 23.6167C29.116 23.7667 29.4994 23.9834 29.916 24.2667L35.4327 28.1834C35.866 28.4834 36.166 28.8334 36.3494 29.25C36.516 29.6667 36.616 30.0834 36.616 30.55Z" fill="#191919"/>
+								</svg>
+								<?php echo esc_html( $cta_left['phone_number'] ); ?>
+							</a>
+							<a class="cta__left__email onscroll" href="mailto:<?php echo esc_html( $cta_left['email_address'] ); ?>">
+								<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+									<path d="M28.3334 34.1667H11.6667C6.66671 34.1667 3.33337 31.6667 3.33337 25.8334V14.1667C3.33337 8.33337 6.66671 5.83337 11.6667 5.83337H28.3334C33.3334 5.83337 36.6667 8.33337 36.6667 14.1667V25.8334C36.6667 31.6667 33.3334 34.1667 28.3334 34.1667Z" fill="#EDC74C"/>
+									<path d="M20.0014 21.45C18.6014 21.45 17.1847 21.0167 16.1013 20.1333L10.8846 15.9666C10.3513 15.5333 10.2513 14.75 10.6846 14.2166C11.118 13.6833 11.9013 13.5833 12.4346 14.0166L17.6514 18.1833C18.918 19.2 21.0679 19.2 22.3345 18.1833L27.5514 14.0166C28.0847 13.5833 28.8847 13.6666 29.3014 14.2166C29.7347 14.75 29.6514 15.55 29.1014 15.9666L23.8847 20.1333C22.818 21.0167 21.4014 21.45 20.0014 21.45Z" fill="#191919"/>
+								</svg>
+								<?php echo esc_html( $cta_left['email_address'] ); ?>
+							</a>
+						</div>
+					</div>
+					<div class="separator has-h-3-font-size onscroll">
+						<?php echo wp_kses_post( $cta_separator ); ?>
+					</div>
+					<div class="cta__right">
+						<h3 class="cta__right__heading has-h-4-font-size onscroll">
+							<?php echo wp_kses_post( $cta_right['heading'] ); ?>
+						</h3>
+						<div class="cta__right__content onscroll">
+							<?php echo do_shortcode( $cta_right['form_shortcode'] ); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+<?php
+$cookies_heading = get_field( 'cookies_heading', 'options' );
+$cookies_consent = get_field( 'cookies_consent', 'options' );
+$cookies_on      = get_field( 'cookies_on', 'options' );
+
+if ( ! isset( $_COOKIE['bs_cookie_consent'] ) && $cookies_on ) {
+	?>
+	<div class="cookies-notice">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 cookies-notice__content">
+					<div class="cookies-notice__text">
+						<?php if ( ! empty( $cookies_heading ) ) { ?>
+							<div class="cookies-notice__heading has-h-4-font-size">
+								<?php echo wp_kses_post( $cookies_heading ); ?>
+							</div>
+						<?php } ?>
+						<?php if ( ! empty( $cookies_consent ) ) { ?>
+							<div class="cookies-notice__consent">
+								<?php echo wp_kses_post( $cookies_consent ); ?>
+							</div>
+						<?php } ?>
+					</div>
+					<div class="cookies-notice__buttons">
+						<div class="wp-block-button is-style-primary">
+							<a href="<?php echo esc_url( get_privacy_policy_url() ); ?>" class="wp-block-button__link wp-element-button">
+								<?php esc_html_e( 'Polityka prywatności', 'zloty-klucz' ); ?>
+							</a>
+						</div>
+						<div class="wp-block-button is-style-primary">
+							<button id="bs-accept-cookies" type="button" class="wp-block-button__link wp-element-button">
+								<?php esc_html_e( 'Akceptuję', 'zloty-klucz' ); ?>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+
+get_footer();

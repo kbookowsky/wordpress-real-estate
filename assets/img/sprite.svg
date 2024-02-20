@@ -1,0 +1,7 @@
+<svg class="page-sprite">
+	<defs>
+		<symbol id="svg_menu" viewBox="0 0 48 48">
+			<path d="M25 30v2H13v-2zm10-7v2H13v-2zm0-7v2H13v-2z" />
+		</symbol>
+	</defs>
+</svg>

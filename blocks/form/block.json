@@ -1,0 +1,57 @@
+{
+	"name": "acf/form",
+	"title": "Formularz",
+	"description": "Formularz",
+	"category": "bs-custom",
+	"apiVersion": 2,
+	"icon": "forms",
+	"supports": {
+		"jsx": true,
+		"align": [
+			"left",
+			"center",
+			"right",
+			"full"
+		],
+		"anchor": true,
+		"alignText": true,
+		"color": {
+			"background": true,
+			"text": false
+		},
+		"spacing": {
+			"margin": [
+				"top",
+				"bottom"
+			],
+			"padding": [
+				"top",
+				"bottom"
+			]
+		}
+	},
+	"example": {
+		"attributes": {
+			"mode": "preview",
+			"data": {
+				"preview_image_help": "preview.jpg",
+				"is_preview": true
+			}
+		}
+	},
+	"acf": {
+		"mode": "preview",
+		"renderTemplate": "render.php",
+		"postTypes": [
+			"post",
+			"page"
+		]
+	},
+	"style": [
+		"file:./../../build/css/blocks/form.min.css",
+		"file:./../../build/css/vendor/select2.min.css"
+	],
+	"script": [
+		"block-form"
+	]
+}
